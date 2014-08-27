@@ -44,7 +44,6 @@
             popupText = "<b>On " + feature.properties.date + ", <a href='https://twitter.com/lineperron' target='blank'>" + feature.properties.user + "</a> said: </b><br>" + feature.properties.tweet;
             if (feature.properties.picture)
             {
-              console.log(feature.properties.picture);
               popupText = popupText.concat("<br>")
               for (i=0; i < feature.properties.picture.length; i++)
                 popupText = popupText.concat("<img src='" + feature.properties.picture[i] + "' height='300'>");
