@@ -15,18 +15,23 @@ twitter_api = twitter.Twitter(auth=auth)
 
 if platform.system() == 'Windows':
   path = 'S:/developer/Darcy/github'
-elif platform.system() == 'OSX':
-  path = '~/Documents/github'
+elif platform.system() == 'Darwin':
+  path = '/Users/Darcy/Documents/github'
 
 print("Base path is {}".format(path))
+
 ## collect data as a stream
 try:
   featureDict
+  print("Already loaded featureDict")
 except(NameError):
+  print("Haven't loaded featureDict")
   try:
     with open(os.path.join(path, 'lineswalk/featureDict.txt'), 'r') as fd:
       featureDict = json.load(fd)
+    print("Read featureDict from file")
   except:
+    print("Couldn't read featureDict so making a blank one.")
     featureDict = {}
 
 tweets = twitter_api.statuses.user_timeline(screen_name='lineperron')
