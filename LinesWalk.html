@@ -16,11 +16,28 @@
       html, body, #map {
         height: 100%;
       }
+      #basemapChangeDiv {
+        position: relative;
+        top: 75px;
+        left: 10px;
+        z-index: 50;
+      }
     </style>
   </head>
   <body>
-    <div id="map"></div>
+    <div id="map">
+      <div id="basemapChangeDiv"><strong>Select Basemap</strong><br>
+        <form>
+          <select id='basemapList' onchange="basemapChangeFunction()">
+            <option>Open Street Map</option>
+            <option>Topographic</option>
+            <option>Satellite</option>
+          </select>
+        </form>
+      </div>
+    </div>
     <script type="text/javascript">
+      var index = 0;
       var twitterIcon = L.icon({
         iconUrl: "TwitterImage.jpeg",
         iconSize: [30,40],
@@ -30,10 +47,15 @@
 
       var map = L.map('map').setView([43, 2], 7);
 
-      var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-      var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-
+      var osmUrl='http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
+      var osmAttrib='&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>';
+      var topoUrl='http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
+      var topoAttrib='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
+      var imageryUrl='http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+      var imageryAttrib='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
       var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
+      var topo = new L.TileLayer(topoUrl, {attribution: topoAttrib});
+      var imagery = new L.TileLayer(imageryUrl, {attribution: imageryAttrib});
 
       map.addLayer(osm);
 
@@ -55,6 +77,20 @@
 //        geojson.addTo(map);
       });
       map.addLayer(markers);
-   </script>
+      function basemapChangeFunction()
+      {
+        selectedLayer = document.getElementById("basemapList");
+        map.eachLayer(function (layer) {
+          map.removeLayer(layer)
+        });
+        if (selectedLayer.selectedIndex == 0)
+          map.addLayer(osm)
+        if (selectedLayer.selectedIndex == 1)
+          map.addLayer(topo)
+        if (selectedLayer.selectedIndex == 2)
+          map.addLayer(imagery)
+        map.addLayer(markers);
+      }
+    </script>
   </body>
 </html>
