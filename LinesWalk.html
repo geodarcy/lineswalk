@@ -53,6 +53,14 @@
       var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
       var topo = new L.TileLayer(topoUrl, {attribution: topoAttrib});
       var imagery = new L.TileLayer(imageryUrl, {attribution: imageryAttrib});
+      var openPrecipitation = L.tileLayer('http://{s}.tile.openweathermap.org/map/precipitation_cls/{z}/{x}/{y}.png', {
+	attribution: 'Map data &copy; <a href="http://openweathermap.org">OpenWeatherMap</a>',
+	opacity: 0.5
+});
+      var openTemperature = L.tileLayer('http://{s}.tile.openweathermap.org/map/temp/{z}/{x}/{y}.png', {
+	attribution: 'Map data &copy; <a href="http://openweathermap.org">OpenWeatherMap</a>',
+	opacity: 0.5
+});
 
       var map = L.map('map', {
         center: [43, 2],
@@ -65,7 +73,11 @@
         "Topographic": topo,
         "Open Street Map": osm
       };
-      L.control.layers(baseMaps).addTo(map);
+      var overlays = {
+        "Temperature": openTemperature,
+        "Precipitation": openPrecipitation
+      };
+      L.control.layers(baseMaps, overlays).addTo(map);
       L.control.scale({imperial: false, maxWidth: 300}).addTo(map);
 
       var markers = new L.MarkerClusterGroup();
